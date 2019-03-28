@@ -3,9 +3,12 @@
 {% block content %}
     <div class="post">
         {% if post.published_date %}
-        <div class="date">
-            <p>Опубликовано: {{ post.published_date }}</p>
-        </div>
+            <div class="date">
+                <p>Опубликовано: {{ post.published_date }}</p>
+            </div>
+            <a class="btn btn-default" href="{% url 'post_delete' pk=post.pk %}">DELETE</a>
+        {% else %}
+            <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">PUBLISH</a>
         {% endif %}
         <h1>{{ post.title }}</h1>
         <p>{{ post.text|linebreaksbr }}</p>

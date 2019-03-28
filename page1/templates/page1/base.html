@@ -9,8 +9,15 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'post_draft_list' %}" class="top-menu">POSTS DRAFTS</a>
-            <a href="{% url 'post_new' %}" class="top-menu">NEW POST<span class="glyphicon glyphicon-plus"></span></a>
+            {% if user.is_authenticated %}
+                <p class="top-menu">HELLO {{ user.username }} </p>
+                <a href="{% url 'post_draft_list' %}" class="top-menu">POSTS DRAFTS</a>
+                <a href="{% url 'post_new' %}" class="top-menu">NEW POST<span class="glyphicon glyphicon-plus"></span></a>
+                <a href="{% url 'logout' %}" class="top-menu">LOGOUT<span class="glyphicon glyphicon-plus"></span></a>
+            {% else %}
+                <a href="{% url 'login' %}" class="top-menu">LOGIN<span class="glyphicon glyphicon-plus"></span></a>
+            {% endif %}
+
             <h1><a href="/">Django Blog</a></h1>
         </div>
         <div class="content container">
