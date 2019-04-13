@@ -12,5 +12,9 @@
         {% endif %}
         <h1>{{ post.title }}</h1>
         <p>{{ post.text|linebreaksbr }}</p>
+            OTHER IN THIS {{ post.theme }}:
+            {% for e in entries %}
+                <p> {{ e.title }} </p>
+            {% endfor %}
     </div>
 {% endblock %}

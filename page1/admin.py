@@ -1,4 +1,12 @@
 from django.contrib import admin
-from .models import Post
+from page1.models import Post, Theme
 
-admin.site.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    readonly_fields = ('pk', )
+    list_display = ('title', 'text', 'theme', 'created_date', 'published_date')
+    list_display_links = ('title', 'text')
+    search_fields = ('title', 'text')
+
+admin.site.register(Post, PostAdmin) # Чтобы приложение появилось в списке административного сайта
+admin.site.register(Theme) # Чтобы приложение появилось в списке административного сайта
+

@@ -1,31 +1,52 @@
 {% load static %}
 <html>
     <head>
-        <title>Django blog</title>
+        <title>
+            {% block title %}
+                Django blog 
+            {% endblock %}
+        </title>
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{% static 'css/page1.css' %}">
+        <link rel="stylesheet" href="{% static 'css/page1.css' now 'U' %}">
     </head>
     <body>
-        <div class="page-header">
-            {% if user.is_authenticated %}
-                <p class="top-menu">HELLO {{ user.username }} </p>
-                <a href="{% url 'post_draft_list' %}" class="top-menu">POSTS DRAFTS</a>
-                <a href="{% url 'post_new' %}" class="top-menu">NEW POST<span class="glyphicon glyphicon-plus"></span></a>
-                <a href="{% url 'logout' %}" class="top-menu">LOGOUT<span class="glyphicon glyphicon-plus"></span></a>
-            {% else %}
-                <a href="{% url 'login' %}" class="top-menu">LOGIN<span class="glyphicon glyphicon-plus"></span></a>
-            {% endif %}
 
-            <h1><a href="/">Django Blog</a></h1>
+
+
+        <div class="page-header container-fluid">
+                <h1><a href="/">Django Blog</a></h1>
+
+            <br>
+            <br> 
+            <nav>
+                <a href="{% url 'all_posts' %}" class="top-menu">Все подряд</a>
+                {% for theme in themes %}
+
+                    <a href="{{ theme.get_absolute_url }}" class="top-menu"> {{ theme }} </a>
+
+                    <!-- <a href="{% url 'by_theme' pk=theme.pk %}" class="top-menu"> {{ theme.theme_name }}  </a> -->
+                    
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    <!-- <p class="top-menu">HELLO {{ user.username }} </p> -->
+                    <a href="{% url 'post_new' %}" class="top-menu">NEW POST<span class="glyphicon glyphicon-plus"></span></a>
+                    <a href="{% url 'post_draft_list'  %}" class="top-menu">POSTS DRAFTS</a>
+                    <a href="{% url 'logout' %}" class="top-menu">LOGOUT<span class="glyphicon glyphicon-plus"></span></a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="top-menu">LOGIN<span class="glyphicon glyphicon-plus"></span></a>
+                {% endif %}
+        </nav>
         </div>
-        <div class="content container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-md-8">
-                    {% block content %}
-                    {% endblock %}
-                </div>
+                    <div class="col-xs-6 col-md-4">AAAAAAAAA</div>
+                    <div class="col-xs-6 col-md-4">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-6 col-md-4">BBBBBBBBB</div>
             </div>
         </div>
     </body>
