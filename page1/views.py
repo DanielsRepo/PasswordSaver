@@ -1,9 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.views.generic.dates import ArchiveIndexView
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from page1.models import Post, Theme
 from .forms import PostForm
@@ -19,6 +22,31 @@ def all_posts(request):
     themes = Theme.objects.all()
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
     return render(request, 'page1/all_posts.html', {'posts': posts, 'themes': themes})
+
+# class AllPostsView(ArchiveIndexView):
+#     model = Post
+#     date_field = 'published_date'
+#     template_name = 'page1/all_posts.html'
+#     context_object_name = 'posts'
+
+#     def get_context_data(self, *args, **kwargs):
+#         context = super().get_context_data(*args, **kwargs)
+#         context['themes'] = Theme.objects.all()
+#         # context['posts'] = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+#         return context
+
+class AllPostsView(ListView):
+    model = Post
+    template_name = 'page1/all_posts.html'
+    paginate_by = 5
+    context_object_name = 'posts'
+    queryset = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['themes'] = Theme.objects.all()
+        return context
+
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -41,6 +69,7 @@ class PostDetailView(DetailView):
         context = super().get_context_data(*args, **kwargs)
         post = self.object
         context['post'] = post
+        context['themes'] = Theme.objects.all()
         context['entries'] = post.theme.entries.all()
 
         return context
@@ -58,16 +87,26 @@ def post_new(request):
     else:
         form = PostForm()
         themes = Theme.objects.all()
-        return render(request, 'page1/post_edit.html', {'form': form, 'themes': themes})
+        return render(request, 'page1/post_new.html', {'form': form, 'themes': themes})
 
 class PostCreateView(CreateView):
-    template_name = 'page1/post_edit.html'
+    template_name = 'page1/post_new.html'
     form_class = PostForm
-    success_url = reverse_lazy('post_detail')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        print(form.instance.user)
         return super(PostCreateView, self).form_valid(form)
+
+class PostEditView(UpdateView):
+    model = Post
+    template_name = 'page1/post_edit.html'
+    form_class = PostForm
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['themes'] = Theme.objects.all()
+        return context
 
 @login_required
 def post_draft_list(request):
@@ -100,6 +139,11 @@ def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
     return redirect('all_posts')
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'page1/post_delete.html'
+    success_url = '/'
 
 def by_theme(request, pk):
     try:

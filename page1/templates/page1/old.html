@@ -1,0 +1,35 @@
+            <nav>
+                <a href="{% url 'all_posts' %}" class="top-menu">Все подряд</a>
+                {% for theme in themes %}
+                    <a href="{{ theme.get_absolute_url }}" class="top-menu"> {{ theme }} </a>
+                    <a href="{% url 'by_theme' pk=theme.pk %}" class="top-menu"> {{ theme.theme_name }}  </a>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    <p class="top-menu">HELLO {{ user.username }} </p>
+                    <a href="{% url 'post_new' %}" class="top-menu">NEW POST<span class="glyphicon glyphicon-plus"></span></a>
+                    <a href="{% url 'post_draft_list'  %}" class="top-menu">POSTS DRAFTS</a>
+                    <a href="{% url 'logout' %}" class="top-menu">LOGOUT<span class="glyphicon glyphicon-plus"></span></a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="top-menu">LOGIN<span class="glyphicon glyphicon-plus"></span></a>
+                {% endif %}
+        </nav> -->
+        <div class="container-fluid">
+            <div class="row">
+                    <div class="col-xs-6 col-md-4">AAAAAAAAA</div>
+                    <div class="col-xs-6 col-md-4">
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                    <div class="col-xs-6 col-md-4">BBBBBBBBB</div>
+            </div>
+        </div>
+
+
+                <div class="post">
+            <div class="date">
+                <p> Опубликовано: {{ post.published_date }} </p>
+            </div>
+                {% url 'post_detail' pk=post.pk as post_detail %}
+                <h1><a href="{{post_detail}}">{{ post.title }}</a></h1>
+                <p>{{ post.text|linebreaksbr }}</p>
+        </div>

@@ -1,20 +1,72 @@
 {% extends './base.html' %}
 
+
 {% block content %}
-    <div class="post">
-        {% if post.published_date %}
-            <div class="date">
-                <p>Опубликовано: {{ post.published_date }}</p>
+<div class="card mb-4">
+    <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+        <div class="card-body">
+            <h2 class="card-title">{{ post.title }}</h2>
+            <p class="card-text">{{ post.text|linebreaksbr }}</p>
+
+            {% if post.published_date %}
+            
+            <a class="btn btn-primary" data-toggle="modal" data-target="#delete_modal">DELETE</a>
+            <!-- Modal -->
+<div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+aria-hidden="true">
+
+<!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+<div class="modal-dialog modal-dialog-centered" role="document">
+
+
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      ...
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Save changes</button>
+    </div>
+  </div>
+</div>
+</div>
+                <a class="btn btn-primary" href="{% url 'post_edit' pk=post.pk %}">EDIT</a>
+            {% else %}
+                <a class="btn btn-primary" href="{% url 'post_publish' pk=post.pk %}">PUBLISH</a>
+                <a class="btn btn-primary" href="{% url 'post_edit' pk=post.pk %}">EDIT</a>
+            {% endif %}
+    </div>
+    <div class="card-footer text-muted">
+            Posted {{ post.published_date }} by {{ request.user }}
+    </div>
+</div>
+
+
+
+{% endblock %}
+{% block widget %}
+    <div class="card my-4">
+        <h5 class="card-header">Other in this theme:</h5>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6">
+                    <ul class="list-unstyled mb-0">
+                        {% for e in post.theme.entries.all %}
+                            {% url 'post_detail' pk=e.pk as post_detail %}
+                            <li>
+                                <a href="{{ post_detail }}"> {{ e.title }} </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-            <a class="btn btn-default" href="{% url 'post_delete' pk=post.pk %}">DELETE</a>
-        {% else %}
-            <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">PUBLISH</a>
-        {% endif %}
-        <h1>{{ post.title }}</h1>
-        <p>{{ post.text|linebreaksbr }}</p>
-            OTHER IN THIS {{ post.theme }}:
-            {% for e in entries %}
-                <p> {{ e.title }} </p>
-            {% endfor %}
+        </div>
     </div>
 {% endblock %}
+

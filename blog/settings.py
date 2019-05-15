@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'blog',
     'page1',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +124,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+TEMPLATE_STRING_IF_INVALID =  " "

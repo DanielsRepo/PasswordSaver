@@ -2,17 +2,19 @@ from django.conf import settings
 from django.core import validators
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
+
 class Post(models.Model): # вторичная ведомая
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
-    title = models.CharField(max_length = 200, validators = [validators.MinLengthValidator(5, message='ERROR!')])
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, null = True)
+    title = models.CharField(max_length = 200, null = True, validators = [validators.MinLengthValidator(5, message='ERROR!')])
     # title = models.CharField(max_length = 200, validators = [validators.MinLengthValidator(5)], error_message={'min_length' : 'ERROR!'})
 
-    text = models.TextField(verbose_name='Описание')
-    theme = models.ForeignKey('Theme', on_delete = models.PROTECT, verbose_name = 'Тема', related_name='entries')
+    text = models.TextField(null = True, verbose_name='Описание')
+    theme = models.ForeignKey('Theme', null = True, on_delete = models.PROTECT, verbose_name = 'Тема', related_name='entries')
     # null = True - необязаьльеоне поле
 
 
-    created_date = models.DateTimeField(default = timezone.now, verbose_name='Создано')
+    created_date = models.DateTimeField(null = True, default = timezone.now, verbose_name='Создано')
     published_date = models.DateTimeField(blank = True, null = True, verbose_name='Опубликовано')
 
     def publish(self):
@@ -25,8 +27,11 @@ class Post(models.Model): # вторичная ведомая
         print(f'{self} saved')
 
     def delete(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+        super().delete(*args, **kwargs)
         print(f'{self} deleted')
+
+    def get_absolute_url(self):
+        return reverse('post_detail', kwargs={'pk':self.pk})
 
     # функциональное поле
     # def title_by_len(self):
@@ -44,7 +49,7 @@ class Post(models.Model): # вторичная ведомая
         verbose_name = 'Пост'
 
 class Theme(models.Model): # первичная ведущая
-    theme_name = models.CharField(max_length = 200, db_index = True, verbose_name = 'Тема')
+    theme_name = models.CharField(null = True, max_length = 200, db_index = True, verbose_name = 'Тема')
 
     def __str__(self):
         return self.theme_name
