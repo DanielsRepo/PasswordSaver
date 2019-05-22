@@ -1,0 +1,49 @@
+{% extends './base.html' %}
+
+{% block content %}
+    {% block theme %}
+    {% endblock %}
+    <!-- <h1 class="my-4"> All posts </h1> -->
+    {% for post in posts %}
+        <div class="card my-4">
+            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+            <div class="card-body">
+                {% url 'post_detail' pk=post.pk as post_detail %}
+              <h2 class="card-title"> {{ post.title }} </h2>
+              <p class="card-text">{{ post.text|linebreaksbr }}</p>
+              <a href="{{post_detail}}" class="btn btn-primary">Read More &rarr;</a>
+            </div>
+            <div class="card-footer text-muted">
+              Posted {{ post.published_date }} by {{ post.author }}
+            </div>
+          </div>
+    {% endfor %}
+    <div>
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <ul class="pagination justify-content-center mb-4">
+          {% if page_obj.has_previous %}
+            <li><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+          {% else %}
+            <li><span class="hover-off">&laquo;</span></li>
+          {% endif %}
+
+          {% for i in paginator.page_range %}
+
+            {% if page_obj.number == i %}
+              <li><b><span class="page-link">{{ i }} </b><span class="sr-only">(current)</span></span></li>
+            {% else %}
+              <li><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <li><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+          {% else %}
+            <li><span class="hover-off">&raquo;</span></li>
+          {% endif %}
+          </ul>
+          {% endif %}
+        </div>
+{% endblock %}
