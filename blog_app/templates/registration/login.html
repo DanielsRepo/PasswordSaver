@@ -1,6 +1,6 @@
 {% load widget_tweaks %}
 
-<form method="post" action="{% url 'login' %}">
+<form method="post" action="">
   {% csrf_token %}
   <div class="modal-header">
     <h3 class="modal-title">Log in</h3>
@@ -9,28 +9,34 @@
     </button>
   </div>
   <div class="modal-body">
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+      {% for error in form.non_field_errors %}
+      Username or password fail!
+      {% endfor %}
+    </div>
+    {% for field in form %}
+    <div class="form-group">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% render_field field class="form-control" placeholder=field.label %}
+      <div class="{% if field.errors %} invalid{% endif %}">
+        {% for error in field.errors %}
+        <p class="help-block">{{ error }}</p>
 
-          <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
-            {% for error in form.non_field_errors %}
-              {{ error }}
-            {% endfor %}
-          </div>
-      
-          {% for field in form %}
-      
-            <div class="form-group">
-              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-              {% render_field field class="form-control" placeholder=field.label %}
-              <div class="{% if field.errors %} invalid{% endif %}">
-                {% for error in field.errors %}
-                  <p class="help-block">{{ error }}</p>
-             
-                {% endfor %}
-              </div>
-            </div>
-          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
 
-    <!-- {% for field in form.fields  %}
+
+
+    <button type="button" class="submit-btn btn btn-primary" formnovalidate="formnovalidate">Log in</button>
+    <input type='hidden' name='next' value="{{ next }}" />
+  </div>
+</form>
+
+
+<!-- 
+    {% for field in form.fields  %}
     {% if field == 'username' %}
     <div class="form-group">
       <div class="input-group">
@@ -39,8 +45,14 @@
           <span class="input-group-text"> <i class="fa fa-user"></i> </span>
         </div>
         <input class="form-control" type="text" name="username">
-        
+      
       </div>
+      <div class="{% if field.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+       
+          {% endfor %}
+        </div>
     </div>
     {% else %}
     <div class="form-group">
@@ -48,13 +60,17 @@
         <div class="input-group-prepend">
           <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
         </div>
-        <input class="form-control" type="password" placeholder="*****" name="password">
+        <input class="form-control" type="password" name="password">
+        
       </div>
-    </div>
+      <div class="{% if field.errors %} invalid{% endif %}">
+          {% for error in field.errors %}
+            <p class="help-block">{{ error }}</p>
+       
+          {% endfor %}
+        </div>
+    </div> 
+  
+  
     {% endif %}
-    {% endfor %} -->
-    <!-- <button type="button" class="submit-btn btn btn-primary" formnovalidate="formnovalidate">Log in</button> -->
-    <input class="btn btn-primary btn-block" type='submit' value='login' />
-    <input type='hidden' name='next' value="{{ next }}" />
-  </div>
-</form>
+    {% endfor %}-->

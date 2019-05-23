@@ -62,8 +62,8 @@
                             </li> -->
                     {% else %}
                         <li class="nav-item">
-                            <!-- <button class="login-btn btn btn-primary" type="button" name="button">Log in</button> -->
-                            <a class="nav-link modal-link" href="{% url 'login' %}" data-toggle="modal" data-target="#login_modal">Login</a>
+                            <a class="modal-link nav-link ">Log in</a>
+                            <!-- <a class="nav-link modal-link" href="{% url 'login' %}" data-toggle="modal" data-target="#login_modal">Login</a> -->
                         </li>
 
                     {% endif %}
@@ -119,28 +119,24 @@
         </div>
     </div>
     </div>
-    <div id="login_modal" class="modal fade text-center" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content"> </div>
-        </div>
-    </div>
-    <script type="text/javascript">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content"></div>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            $(function () {
+              $(".modal-link").modalForm({formURL: "{% url 'login' %}"});
+            });
+            </script>
+    <!-- <script type="text/javascript">
         $('.modal-link').on('click', function (e) {
             e.preventDefault();
             $('#login_modal').modal('show').find('.modal-content').load($(this).attr('href'));
         });
-    </script>
-    <!-- <script  type="text/javascript">
-        $(".login-btn").on('click', function (e) {
-            e.preventDefault();
-            $(".login-btn").modalForm({formURL: "{% url 'login' %}"});
-            console.log("!!!");
-        });
-        // $(function() {
-        //     $(".login-btn").modalForm({formURL: "{% url 'login' %}"});
-        //     console.log("!!!");
-        // });
     </script> -->
+ 
 </body>
 
 
