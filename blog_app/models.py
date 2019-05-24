@@ -4,6 +4,13 @@ from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 
+class PostManager(models.Manager):
+    def published(self):
+        return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
+
+    def drafts(self):
+        return self.filter(published_date__isnull=True).order_by('-created_date')
+
 class Post(models.Model): # вторичная ведомая
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, null = True)
     title = models.CharField(max_length = 200, null = True, validators = [validators.MinLengthValidator(5, message='ERROR!')])
@@ -13,9 +20,10 @@ class Post(models.Model): # вторичная ведомая
     theme = models.ForeignKey('Theme', null = True, on_delete = models.CASCADE, verbose_name = 'Тема', related_name='entries')
     # null = True - необязаьльеоне поле
 
-
     created_date = models.DateTimeField(null = True, default = timezone.now, verbose_name='Создано')
     published_date = models.DateTimeField(blank = True, null = True, verbose_name='Опубликовано')
+
+    objects = PostManager()
 
     def publish(self):
         self.published_date = timezone.now()
@@ -159,3 +167,6 @@ class Theme(models.Model): # первичная ведущая
 # datetimes тоже но плюс время 
 
 # >>> Post.objects.in_bulk([1,2,3,4,5], field_name='pk')
+
+# PostManager
+# objects = PostManager()

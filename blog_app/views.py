@@ -47,7 +47,7 @@ class AllPostsView(ListView):
     template_name = 'blog_app/all_posts.html'
     paginate_by = 5
     context_object_name = 'posts'
-    queryset = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
+    queryset = Post.objects.published()
     
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -67,7 +67,7 @@ def post_detail(request, pk):
 
     data = {'A': [{'a':'aa', 'aa':'aaa'}], 'B':'b',}
     return JsonResponse(data)
-
+ 
 class PostDetailView(DetailView):
     model = Post
     template_name = 'blog_app/post_detail.html'
@@ -135,7 +135,7 @@ class PostDraftView(ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        return Post.objects.filter(published_date__isnull = True).order_by('-created_date')
+        return Post.objects.drafts()
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

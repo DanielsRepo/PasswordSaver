@@ -5,11 +5,11 @@
     <div class="card my-4">
         <div class="card-body">
             <h2 class="card-title">EDIT POST</h>
-            <form method="POST" >
-                {% csrf_token %}
-                {{ form | crispy }}
-                <button class="btn btn-primary" type="submit">Save</button>
-            </form>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <button class="btn btn-primary" type="submit">Save</button>
+                </form>
         </div>
     </div>
 {% endblock %}
