@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView
@@ -15,10 +15,45 @@ from django.urls import reverse_lazy, reverse
 from django.template import loader
 from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 
 from bootstrap_modal_forms.generic import BSModalLoginView
+
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+class signup(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('all_posts')
+    template_name = 'registration/registration.html'
+
+# def signup(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             username = form.cleaned_data.get('username')
+#             raw_password = form.cleaned_data.get('password1')
+#             user = authenticate(username=username, password=raw_password)
+#             login(request, user)
+#             return redirect('all_posts')
+#     else:
+#         form = UserCreationForm()
+#     return render(request, 'registration/registration.html', {'form': form})
+
+# class RegistrationView(FormView):
+#     form_class = RegistrationForm
+#     template_name = 'registration/registration.html'
+
+#     def form_valid(self, form):
+#         form.save()
+#         username = form.cleaned_data.get('username')
+#         password = form.cleaned_data.get('password1')
+#         user = authenticate(username=username, password=password)
+#         login(self.request, user)
+#         return redirect('all_posts')
 
 class LoginView(BSModalLoginView):
     template_name = 'registration/login.html'

@@ -1,0 +1,38 @@
+ {% extends 'blog_app/base.html' %}
+ {% load widget_tweaks %}
+
+ {% block content %}
+<div class="card my-4">
+    <h4 class="card-header text-center py-3">
+        <strong>Registration</strong>
+    </h4>
+    <div class="card-body">
+    <form method="POST" action="{% url 'registration' %}">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">
+                                {% if field == form.username %}
+                                    <i class="fa fa-user"></i> 
+                                {% elif field == form.email %}
+                                    <i class="fa fa-envelope"></i>
+                                {% elif field == form.password1 or field == form.password2 %}
+                                    <i class="fa fa-key"></i>
+                                {% endif %} 
+                        </span>
+                    </div>
+                    {% render_field field class="form-control" placeholder=field.label %}
+                </div>
+            </div>
+        {% endfor %} 
+    </form>
+ </div>
+ <div class="card-footer">
+        <!-- <button class="submit-btn btn btn-primary" type="submit">Submit</button> -->
+        <!-- <input type='hidden' name='next' value="{{ next }}" /> -->
+        <input type="submit" class="btn btn-primary" value='Submit'>Submit</button>
+   </div>
+</div>
+{% endblock %}

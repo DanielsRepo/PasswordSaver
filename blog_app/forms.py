@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 
 from .models import Post, Theme
@@ -21,3 +21,15 @@ class LoginForm(AuthenticationForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+# class RegistrationForm(UserCreationForm):
+#     email = forms.EmailField(max_length = 254, help_text = 'This field is required.')
+
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email', 'password1', 'password2']
+
+    # def save(self):
+    #     user = super(RegistrationForm, self).save()
+    #     user.username = self.cleaned_data('username')
+    #     user.email = self.cleaned_data('email')
