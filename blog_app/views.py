@@ -21,39 +21,32 @@ from django.template.loader import render_to_string
 
 from bootstrap_modal_forms.generic import BSModalLoginView
 
-from django.contrib.auth.forms import UserCreationForm
+from blog_app.forms import RegistrationForm
+
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
-class signup(CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('all_posts')
-    template_name = 'registration/registration.html'
+from django import forms
 
-# def signup(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             username = form.cleaned_data.get('username')
-#             raw_password = form.cleaned_data.get('password1')
-#             user = authenticate(username=username, password=raw_password)
-#             login(request, user)
-#             return redirect('all_posts')
-#     else:
-#         form = UserCreationForm()
-#     return render(request, 'registration/registration.html', {'form': form})
+def signup(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            userObj = form.cleaned_data
+            username = userObj['username']
+            email =  userObj['email']
+            password =  userObj['password']
+            if not (User.objects.filter(username=username).exists() or User.objects.filter(email=email).exists()):
+                User.objects.create_user(username, email, password)
+                user = authenticate(username = username, password = password)
+                login(request, user)
+                return HttpResponseRedirect('/')
+            else:
+                raise forms.ValidationError('Looks like a username with that email or password already exists')
+    else:
+        form = RegistrationForm()
+    return render(request, 'registration/registration.html', {'form' : form})
 
-# class RegistrationView(FormView):
-#     form_class = RegistrationForm
-#     template_name = 'registration/registration.html'
-
-#     def form_valid(self, form):
-#         form.save()
-#         username = form.cleaned_data.get('username')
-#         password = form.cleaned_data.get('password1')
-#         user = authenticate(username=username, password=password)
-#         login(self.request, user)
-#         return redirect('all_posts')
 
 class LoginView(BSModalLoginView):
     template_name = 'registration/login.html'
@@ -87,8 +80,24 @@ class AllPostsView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['themes'] = Theme.objects.all()
+        context['users'] = User.objects.all()
         return context
 
+def get_user_posts(request, username):
+    user = User.objects.get(username = username)
+    return render(request, 'blog_app/all_posts.html', {'user':user})
+    
+class UserPostsView(ListView):
+    model = Post
+    template_name = 'blog_app/user_posts.html'
+    paginate_by = 5
+    context_object_name = 'posts'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['themes'] = Theme.objects.all()
+        context['posts'] = Post.objects.by_user(self.request.user)
+        return context
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
@@ -96,12 +105,6 @@ def post_detail(request, pk):
     entries = post.theme.entries.all()
         
     return render(request, 'blog_app/post_detail.html', {'post': post, 'themes': themes, 'entries': entries})
-
-    filename = 'C:\Django\img.png'
-    return FileResponse(open(filename, 'rb'), as_attachment=True)
-
-    data = {'A': [{'a':'aa', 'aa':'aaa'}], 'B':'b',}
-    return JsonResponse(data)
  
 class PostDetailView(DetailView):
     model = Post
@@ -112,9 +115,7 @@ class PostDetailView(DetailView):
         post = self.object
         context['post'] = post
         context['themes'] = Theme.objects.all()
-        context['entries'] = post.theme.entries.all()
-        context['entries_quan'] = len(post.theme.entries.all())
-
+        context['entries'] = post.theme.entries.published()
         return context
 
 @login_required
@@ -126,7 +127,6 @@ def post_new(request):
             post.author = request.user
             post.save()
             return redirect('post_detail', pk=post.pk)
-            # return HttpResponseRedirect(reverse('post_detail', kwargs = {'pk' : 'post.pk'})) не пашит
     else:
         form = PostForm()
         themes = Theme.objects.all()
@@ -137,8 +137,8 @@ class PostCreateView(CreateView):
     form_class = PostForm
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
-        print(form.instance.user)
+        post = form.save(commit=False)
+        post.author = self.request.user
         return super(PostCreateView, self).form_valid(form)
 
 class PostEditView(UpdateView):
@@ -175,11 +175,13 @@ class PostDraftView(ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['themes'] = Theme.objects.all()
+        context['drafts_count'] = Post.objects.drafts().count()
         return context
 
 @login_required
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    post.author = request.user
     post.publish()
     return redirect('post_detail', pk=pk)
 
@@ -219,8 +221,8 @@ class ThemeListView(ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        return Post.objects.filter(theme = self.kwargs['pk']).order_by('-published_date')
-    
+        return Post.objects.by_theme(self.kwargs['pk'])
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['themes'] = Theme.objects.all()

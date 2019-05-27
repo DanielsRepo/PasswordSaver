@@ -5,15 +5,22 @@ from django.utils import timezone
 from django.urls import reverse
 
 class PostManager(models.Manager):
+    def by_theme(self, pk):
+        return self.filter(published_date__lte=timezone.now(), theme = pk).order_by('-published_date')
+
     def published(self):
         return self.filter(published_date__lte=timezone.now()).order_by('-published_date')
 
     def drafts(self):
         return self.filter(published_date__isnull=True).order_by('-created_date')
+    
+    def by_user(self, user):
+        return self.published().filter(author=user)
+        # return self.filter(published_date__lte=timezone.now(), author=user).order_by('-published_date')
 
 class Post(models.Model): # вторичная ведомая
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, null = True)
-    title = models.CharField(max_length = 200, null = True, validators = [validators.MinLengthValidator(5, message='ERROR!')])
+    title = models.CharField(max_length = 200, null = True)
     # title = models.CharField(max_length = 200, validators = [validators.MinLengthValidator(5)], error_message={'min_length' : 'ERROR!'})
 
     text = models.TextField(null = True, verbose_name='Описание')
@@ -28,7 +35,7 @@ class Post(models.Model): # вторичная ведомая
     def publish(self):
         self.published_date = timezone.now()
         self.save()
-        print(f'{self} published')
+        print(f'{self} published {self.author}')
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

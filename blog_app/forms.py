@@ -22,12 +22,31 @@ class LoginForm(AuthenticationForm):
         model = User
         fields = ['username', 'password']
 
-# class RegistrationForm(UserCreationForm):
-#     email = forms.EmailField(max_length = 254, help_text = 'This field is required.')
 
-#     class Meta:
-#         model = User
-#         fields = ['username', 'email', 'password1', 'password2']
+class RegistrationForm(forms.Form):
+    username = forms.CharField(
+        required = True,
+        label = 'Username',
+        max_length = 32
+    )
+    email = forms.CharField(
+        required = True,
+        label = 'Email',
+        max_length = 32,
+    )
+    password = forms.CharField(
+        required = True,
+        label = 'Password',
+        max_length = 32,
+        widget = forms.PasswordInput()
+    )
+
+# class RegistrationForm(UserCreationForm):
+    # email = forms.EmailField(max_length = 254, help_text = 'This field is required.')
+
+    # class Meta:
+    #     model = User
+    #     fields = ['username', 'email', 'password1', 'password2']
 
     # def save(self):
     #     user = super(RegistrationForm, self).save()

@@ -4,28 +4,15 @@
     {% block theme %}
     {% endblock %}
 
-    {% for post in posts %}
-    <div class="card my-4">
-        <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-        <div class="card-body">
-            <h2 class="card-title"> {{ post.title }} </h2>
-            <p class="card-text">{{ post.text|linebreaksbr }}</p>
-            {% url 'post_detail' pk=post.pk as post_detail %}
-            <a href="{{post_detail}}" class="btn btn-primary">Read More &rarr;</a>
-        </div>
-        <div class="card-footer text-muted">
-            {% if post.published_date == null %}
-                Created {{ post.created_date }} by {{ post.author }}
-            {% else %}
-                Posted {{ post.published_date }} by {{ post.author }}
-            {% endif %}
-        </div>
-    </div>
-    {% endfor %}
+    {% block posts %}
+        {% for post in posts %}
+            {% include "./post.html" %}
+        {% endfor %}
+    {% endblock %}
 
     <!-- Pagination -->
     <div>
-        {% if is_paginated %}
+        {% if is_paginated and posts.count >= 5 %}
             <ul class="pagination justify-content-center mb-4">
                 {% if page_obj.has_previous %}
                     <li><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>

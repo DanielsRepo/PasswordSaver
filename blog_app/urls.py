@@ -5,6 +5,11 @@ urlpatterns = [
     # path('', views.all_posts, name='all_posts'),
     path('', views.AllPostsView.as_view(), name='all_posts'),
 
+    path('my_posts', views.UserPostsView.as_view(), name='user_posts'),
+    path('<username>_posts', views.get_user_posts, name='users_posts'),
+
+
+
     # path('theme/<int:pk>', views.by_theme, name = 'by_theme'),
     path('theme/<int:pk>', views.ThemeListView.as_view(), name = 'by_theme'),
 

@@ -1,0 +1,17 @@
+<div class="card my-4">
+    <img class="card-img-top" src="http://placehold.it/550x300" alt="Card image cap">
+    <div class="card-body">
+        <h4 class="card-title"> {{ post.title }} </h4>
+        <p class="  card-text ">{{ post.text|linebreaksbr|truncatewords:50 }}</p>
+        {% url 'post_detail' pk=post.pk as post_detail %}
+        <a href="{{post_detail}}" class="btn btn-primary">Read More &rarr;</a>
+    </div>
+    <div class="card-footer text-muted">
+        {% if post.published_date == null %}
+            Created {{ post.created_date }} by {{ post.author }}
+        {% else %}
+            Posted {{ post.published_date }} by {{ post.author }}
+        {% endif %}
+    </div>
+</div>
+    
