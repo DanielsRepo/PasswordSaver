@@ -5,9 +5,11 @@ from django.contrib.auth.models import User
 from .models import Post, Theme
 from bootstrap_modal_forms.forms import BSModalForm
 
+
 class PostForm(forms.ModelForm):
     # для изменения ------ в выпадающ списке
     theme = forms.ModelChoiceField(Theme.objects.all(), empty_label='Choose one of themes')
+
     class Meta:
         model = Post
         fields = ('title', 'text', 'theme')
@@ -17,6 +19,7 @@ class PostForm(forms.ModelForm):
     #     super(PostForm, self).__init__(*args, **kwargs)
     #     self.fields['theme'].empty_label = 'Choose one of themes'
 
+
 class LoginForm(AuthenticationForm):
     class Meta:
         model = User
@@ -25,20 +28,20 @@ class LoginForm(AuthenticationForm):
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(
-        required = True,
-        label = 'Username',
-        max_length = 32
+        required=True,
+        label='Username',
+        max_length=32
     )
     email = forms.CharField(
-        required = True,
-        label = 'Email',
-        max_length = 32,
+        required=True,
+        label='Email',
+        max_length=32,
     )
     password = forms.CharField(
-        required = True,
-        label = 'Password',
-        max_length = 32,
-        widget = forms.PasswordInput()
+        required=True,
+        label='Password',
+        max_length=32,
+        widget=forms.PasswordInput()
     )
 
 # class RegistrationForm(UserCreationForm):

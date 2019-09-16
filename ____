@@ -1,0 +1,101 @@
+# c:/Django/site/Scripts/activate.ps1
+
+# createsuperuser
+
+# from blog_app.models import Post, Theme
+
+# from django.contrib.auth.models import User
+#  u = User.objects.get(username='dancher')
+
+# p = Post(author=u, title='AAAA', text='AAAA')
+# p.save()
+# p.save(update_fiels=['title'])
+
+fro,
+# p = Post.objects.get(pk = 29)
+# p.publish()
+
+# t = Theme.objects.create(pk = 2, theme_name = 'Тема 2')
+# Theme.objects.filter(pk=1).delete()
+# t = Theme.objects.get_or_create(theme_name='THEME')
+# p = Post.objects.update_or_create(title = 'AAAA', defaults={'text':'AAAAAAAAAAAAAAAA'})
+# for i in Post.objects.all():
+# ...     i.theme = Theme.objects.get(pk=random.randint(2,4))
+# ...     i.save()
+
+# p = PostForm({'title':'as','text':'assss','theme':'Тема 2'})
+
+# t = Theme.objects.get(theme_name="Тема 2")
+# for i in t.entries.all():
+# ...     print(i.title)
+
+# post_set = related_name
+
+# >>> t.post_set.earliest('published_date')
+# <Post: wegewg>
+# >>> t.post_set.earliest('-published_date')
+# <Post: er5yhewrs>
+# >>> t.post_set.latest('-published_date')
+# <Post: wegewg>
+# >>> Post.objects.filter(theme = t).exists()
+# True
+# >>> Post.objects.filter(theme = t).count()
+# 6
+
+# get_next_by_<имя поля> 1 get_previous_by_<имя поля>([<условия поиска>])
+# exclude - противоположность filter
+
+# >>> for i in Post.objects.filter(theme__theme_name = 'Тема 2'):
+# ...     print(i.title)
+
+# for i in Post.objects.filter(Q(theme__theme_name='Тема 2') | Q(theme__theme_name='Тема 3')):
+# ...     print(i.title)
+
+# distinct - уникальные записи
+
+# result = Bb.objects.aggregate(Min('price'), Max('price'))
+# >>> result['price_min'], result['price_max']
+# result = Bb.objects.aggregate(diff=Max('price')-Min('price'))
+# >>> result['diff']
+
+# for i in Theme.objects.annotate(cnt = Count('post')):
+# ...     print(i.theme_name, " : ", i.cnt)
+
+# вычисляемое поле
+# >>> from django.dЬ.models import ExpressionWrapper, IntegerField
+# >>> for Ь in Bb.objects.annotate(
+# half_price=ExpressionWrapper(F('price')/2,IntegerField())):
+# print(b.title, b.half_price)
+
+# aggregate по всем записям модели
+# annotate по группам
+
+# sq = Subquery(Post.objects.filter(theme = OuterRef('pk')).order_by('-published_date').values('published_date')[:1])
+# >>> for i in Theme.objects.annotate(last_post_date = sq):
+# ...     print(i.theme_name, i.last_post_date)
+
+# >>> from django.dЬ.models import Exists
+# >>> subquery = Exists(Bb.objects.filter(rubric=OuterRef('pk'),
+# price~gt=l00000))
+# >>> for r in RuЬric.objects.annotate(is_expensive=suЬquery) .filter(
+# is_expensive=True): print(r.name)
+
+
+# union intersection difference
+# >>> p1 = Post.objects.filter(theme = Theme.objects.get(theme_name = 'Тема 3'))
+# >>> p2 = Post.objects.filter(theme = Theme.objects.get(theme_name = 'Тема 2'))
+# >>> for i in p1.union(p2):
+# ...     print(i.title)
+
+# >>> from django.db.models import F
+# >>> Post.objects.values('title', themeName = F('theme')) возвращ queryset
+# >>> Post.objects.values_list('title', 'theme') возвращ кортежи
+# Post.objects.values_list('title', flat=True) для одного поля
+
+# >>> Post.objects.dates('published_date', 'month') с уникал знач даты месяца
+# datetimes тоже но плюс время
+
+# >>> Post.objects.in_bulk([1,2,3,4,5], field_name='pk')
+
+# PostManager
+# objects = PostManager()
