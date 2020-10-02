@@ -1,0 +1,35 @@
+<!-- Filters -->
+<div class="card my-4 position-fixed">
+    <h5 class="card-header">Filters</h5>
+    <div class="card-body">
+        <div class="dropdown">
+
+            <!--Trigger-->
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">Themes
+            </button>
+
+            <!--Menu-->
+            <div class="dropdown-menu dropdown-primary">
+                {% for theme in themes %}
+                    <a class="dropdown-item" href="{{ theme.get_absolute_url }}"> {{ theme }} ({{ theme.entries.count }}) </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="dropdown">
+
+            <!--Trigger-->
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">Users
+            </button>
+
+            <!--Menu-->
+            <div class="dropdown-menu dropdown-primary">
+                {% for user, count in users.items %}
+                    <a class="dropdown-item" href="{% url 'by_user' username=user.username %}"> {{ user.username }}
+                        ({{ count }}) </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

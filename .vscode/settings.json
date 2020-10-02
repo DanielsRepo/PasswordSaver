@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "site\\Scripts\\python.exe",
-    "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true,
-    "python.linting.pep8Enabled": false
-}
