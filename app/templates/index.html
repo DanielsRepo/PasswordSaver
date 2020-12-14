@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block saver %}
+    <form class="text-center p-5" action="/" method="post">
+        {{ form.hidden_tag() }}
+        <div class="form-row">
+            <div class="col">
+                <input class="form-control" type="text" placeholder="Service" name="service"
+                       value="{{ request.form.service }}">
+                <div class="{% if form.service.errors %} invalid{% endif %}">
+                    {% for error in form.service.errors %}
+                        <small class="form-text text-danger">
+                            {{ error }}
+                        </small>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col">
+                <input class="form-control" type="text" placeholder="Password" name="password"
+                       value="{{ request.form.password }}">
+                <div class="{% if form.password.errors %} invalid{% endif %}">
+                    {% for error in form.password.errors %}
+                        <small class="form-text text-danger">
+                            {{ error }}
+                        </small>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col">
+                <input class="btn btn-info btn-block btn-md" type="submit" value="Save">
+            </div>
+        </div>
+    </form>
+
+    {% if passwords.count != 0 %}
+        <div class="pr-5 pl-5 container-fluid">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Service</th>
+                <th scope="col">Password</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for service, password in passwords.items() %}
+                <tr>
+                    <td> {{ service }} </td>
+                    <td> {{ password[1] }} </td>
+                    <td> <a href="/delete/{{ password[0] }}"><i class="fas fa-trash"></i></a> </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+     </div>
+
+    {% endif %}
+{% endblock %}

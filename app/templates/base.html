@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Password Saver</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mdb.min.css') }}">
+</head>
+<body>
+{% if current_user.is_authenticated %}
+    <div class="d-flex justify-content-center">
+        <div class="card my-4">
+            <div class="d-flex flex-row">
+                <div class="pt-3 pl-3 mr-auto">Hello, <b>{{ current_user.username }}</b>!</div>
+                <div class="pt-3 pr-3 ml-auto"><a href="/logout">Logout</a></div>
+            </div>
+            {% block saver %}{% endblock %}
+        </div>
+    </div>
+{% else %}
+    <div class="d-flex justify-content-center">
+        <div class="card my-4">
+            {% block login %}{% endblock %}
+            {% block registration %}{% endblock %}
+        </div>
+    </div>
+{% endif %}
+</body>
+</html>
