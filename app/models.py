@@ -7,9 +7,13 @@ from cryptography.fernet import Fernet
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(120), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(256), unique=True, nullable=False)
+    password = db.Column(db.String(256), unique=True, nullable=False)
+    email = db.Column(db.String(256), unique=True, nullable=False)
+
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -25,22 +29,21 @@ def load_user(id):
 
 class Password(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    service = db.Column(db.String(120))
-    password = db.Column(db.String(120))
-    key = db.Column(db.String(120))
+    service = db.Column(db.String(256))
+    password = db.Column(db.LargeBinary)
+    key = db.Column(db.LargeBinary)
     user = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def save_password(self, password):
-        key = Fernet.generate_key()
-        self.key = key
-        f = Fernet(key)
-        self.password = f.encrypt(password.encode())
+        self.key = Fernet.generate_key()
+        self.password = Fernet(self.key).encrypt(password.encode())
 
     def decrypt_password(self, password):
-        f = Fernet(self.key)
-        return f.decrypt(password).decode()
+        return Fernet(self.key).decrypt(password).decode()
 
     @staticmethod
     def delete_password(password_id):
         Password.query.filter_by(id=password_id).delete()
 
+
+db.create_all()

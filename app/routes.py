@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 
 
-@app.route('/', methods=['post', 'get'])
+@app.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
     form = SavePasswordForm()
@@ -25,7 +25,7 @@ def index():
     return render_template('index.html', form=form, passwords=passwords)
 
 
-@app.route('/delete/<password_id>', methods=['GET'])
+@app.route('/delete/<password_id>')
 def delete(password_id):
     Password.delete_password(password_id)
     db.session.commit()

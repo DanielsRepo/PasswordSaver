@@ -1,8 +1,5 @@
 .idea/
 
-# dotenv
-.env
-
 # virtualenv
 .venv
 venv/
@@ -53,6 +50,9 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+.db
+db.sqlite3
 
 # Flask stuff:
 instance/
