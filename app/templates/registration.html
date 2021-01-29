@@ -1,45 +1,44 @@
 {% extends "base.html" %}
 
 {% block registration %}
-    <form class="text-center p-5" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p class="h4 mb-4">Sign up</p>
-        <input class="form-control mb-4" type="text" placeholder="Username" name="username"
-               value="{{ request.form.username }}">
-        <div class="{% if form.username.errors %} invalid{% endif %}">
-            {% for error in form.username.errors %}
-                <small class="form-text text-danger mb-4">
-                    {{ error }}
-                </small>
-            {% endfor %}
-        </div>
-        <input class="form-control mb-4" type="email" placeholder="E-mail" name="email"
-               value="{{ request.form.email }}">
-        <div class="{% if form.email.errors %} invalid{% endif %}">
-           {% for error in form.email.errors %}
-                <small class="form-text text-danger mb-4">
-                    {{ error }}
-                </small>
-            {% endfor %}
-        </div>
-        <input class="form-control mb-4" type="password" placeholder="Password" name="password"
-               value="{{ request.form.password }}">
-        <div class="{% if form.password.errors %} invalid{% endif %}">
-           {% for error in form.password.errors %}
-                <small class="form-text text-danger mb-4">
-                    {{ error }}
-                </small>
-            {% endfor %}
-        </div>
-        <input class="form-control mb-4" type="password" placeholder="Repeat password" name="password2"
-               value="{{ request.form.password2 }}">
-        <div class="{% if form.password2.errors %} invalid{% endif %}">
-           {% for error in form.password2.errors %}
-                <small class="form-text text-danger mb-4">
-                    {{ error }}
-                </small>
-            {% endfor %}
-        </div>
-        <input class="btn btn-info btn-block my-4" type="submit" value="Register">
-    </form>
+<form class="text-center p-5" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p class="h4 mb-4">Sign up</p>
+    <input class="form-control mb-4" type="text" placeholder="Username" name="username"
+        value="{{ request.form.username }}">
+    <div class="{% if form.username.errors %} invalid{% endif %}">
+        {% for error in form.username.errors %}
+        <small class="form-text text-danger mb-4">
+            {{ error }}
+        </small>
+        {% endfor %}
+    </div>
+    <input class="form-control mb-4" type="email" placeholder="E-mail" name="email" value="{{ request.form.email }}">
+    <div class="{% if form.email.errors %} invalid{% endif %}">
+        {% for error in form.email.errors %}
+        <small class="form-text text-danger mb-4">
+            {{ error }}
+        </small>
+        {% endfor %}
+    </div>
+    <input class="form-control mb-4" type="password" placeholder="Password" name="password"
+        value="{{ request.form.password }}">
+    <div class="{% if form.password.errors %} invalid{% endif %}">
+        {% for error in form.password.errors %}
+        <small class="form-text text-danger mb-4">
+            {{ error }}
+        </small>
+        {% endfor %}
+    </div>
+    <input class="form-control mb-4" type="password" placeholder="Repeat password" name="password2"
+        value="{{ request.form.password2 }}">
+    <div class="{% if form.password2.errors %} invalid{% endif %}">
+        {% for error in form.password2.errors %}
+        <small class="form-text text-danger mb-4">
+            {{ error }}
+        </small>
+        {% endfor %}
+    </div>
+    <input class="btn btn-info btn-block my-4" type="submit" value="Register">
+</form>
 {% endblock %}

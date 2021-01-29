@@ -1,35 +1,35 @@
 {% extends "base.html" %}
 
 {% block login %}
-    <form class="text-center p-5" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p class="h4 mb-4">Sign in</p>
-        <input class="form-control mb-4" type="text" placeholder="Username" name="username"
-               value="{{ request.form.username }}">
-        <div class="{% if form.username.errors %} invalid{% endif %}">
-            {% for error in form.username.errors %}
-                <small class="form-text text-danger mb-4">
-                    {{ error }}
-                </small>
-            {% endfor %}
-        </div>
-        <input class="form-control mb-4" type="password" placeholder="Password" name="password"
-               value="{{ request.form.password }}">
-        <div class="{% if form.password.errors %} invalid{% endif %}">
-            {% for error in form.password.errors %}
-                <small class="form-text text-danger mb-4">
-                    {{ error }}
-                </small>
-            {% endfor %}
-        </div>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <small class="form-text text-danger mb-4">
-                    {{ messages[0] }}
-                </small>
-            {% endif %}
-        {% endwith %}
-        <input class="btn btn-info btn-block my-4" type="submit" value="Login">
-        <p>Don't have an account? <a href="/register">Register</a></p>
-    </form>
+<form class="text-center p-5" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p class="h4 mb-4">Sign in</p>
+    <input class="form-control mb-4" type="text" placeholder="Username" name="username"
+        value="{{ request.form.username }}">
+    <div class="{% if form.username.errors %} invalid{% endif %}">
+        {% for error in form.username.errors %}
+        <small class="form-text text-danger mb-4">
+            {{ error }}
+        </small>
+        {% endfor %}
+    </div>
+    <input class="form-control mb-4" type="password" placeholder="Password" name="password"
+        value="{{ request.form.password }}">
+    <div class="{% if form.password.errors %} invalid{% endif %}">
+        {% for error in form.password.errors %}
+        <small class="form-text text-danger mb-4">
+            {{ error }}
+        </small>
+        {% endfor %}
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <small class="form-text text-danger mb-4">
+        {{ messages[0] }}
+    </small>
+    {% endif %}
+    {% endwith %}
+    <input class="btn btn-info btn-block my-4" type="submit" value="Login">
+    <p>Don't have an account? <a href="/register">Register</a></p>
+</form>
 {% endblock %}

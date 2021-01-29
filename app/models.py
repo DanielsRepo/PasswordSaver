@@ -1,6 +1,6 @@
 from . import db
 from flask_login import UserMixin
-from app import login
+from . import login
 from werkzeug.security import generate_password_hash, check_password_hash
 from cryptography.fernet import Fernet
 
@@ -32,7 +32,7 @@ class Password(db.Model):
     service = db.Column(db.String(256))
     password = db.Column(db.LargeBinary)
     key = db.Column(db.LargeBinary)
-    user = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def save_password(self, password):
         self.key = Fernet.generate_key()
